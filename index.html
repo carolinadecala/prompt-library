@@ -527,7 +527,7 @@
 
 <script>
 const data = [
-  // PROMPT WRITING
+  
   // ANTHROPIC DOCS
   { id:1, source:"anthropic", category:"Verbosity and response length", prompts:[
     { id:"1.1", text:"Provide concise, focused responses. Skip non-essential context, and keep examples minimal." },
@@ -658,6 +658,12 @@ const data = [
     { id:"23.3", text:"I have a difficult conversation coming up with a team member about [insert issue]. Help me think through what to say, how to open, and what questions to ask. Return a 3-part conversation guide." },
     { id:"23.4", text:"I'm dealing with a conflict between my team and another function. Here's a summary of the tension and recent incidents: [insert info]. Suggest root causes and a 3-step mediation approach." }
   ]},
+  { id:24, source:"openai", category:"Strategic planning and team health", prompts:[
+    { id:"24.1", text:"Draft clear and measurable quarterly goals for my team. Here is the business context, company objectives, and recent performance: [insert context]. Return 3 Objectives with 3-4 Key Results each." },
+    { id:"24.2", text:"Assess skill gaps on my team. Here's our current skill matrix and desired future state: [insert info]. Identify key gaps and suggest training or hiring solutions. Return findings in a short table." },
+    { id:"24.3", text:"Based on this timesheet data (weekly hours logged per person), flag any early signs of burnout risk. Use a threshold of more than 45 hours for 2+ weeks. Return a summary of flagged employees and trends in average hours." },
+    { id:"24.4", text:"I'm noticing signs of disengagement or dysfunction on my team. Based on this description of recent behavior and team dynamics: [insert description], what are the likely causes and what should I do next? Provide a 3-part action plan." }
+  ]},
   // PROMPT WRITING
   { id:0, source:"meta", category:"How to write a prompt", prompts:[
     { id:"0.1", text:"You are a [role]. [Context about the situation]. Your task is to [specific task]. Format your response as [desired format].", note:"<strong>Role:</strong> the expert perspective to approach from. <br><strong>Objectives:</strong> what you want and how answers should be submitted.</br> <br><strong>Context:</strong> specific details about the situation and who it's helping.</br> <br><strong>Task:</strong> the action to take, in one sentence.</br> <br><strong>Style and tone:</strong> how the final text should sound.</br> <br><strong>Format:</strong> the exact structure of the deliverable.</br> <br><strong>Example:</strong> a real-world reference for voice and structure." },
@@ -671,12 +677,6 @@ const data = [
     { id:"0.9", text:"Use Markdown for complex, multi-step, or structured tasks. When using tags: close every opening tag before starting a parallel section, and limit each tag to the content it directly contains." },
     { id:"10", text:"Base your answer only on the attached documents. If the information is not available in the documents, say so explicitly. Do not make assumptions or draw on outside knowledge." }
   ]},
-  { id:24, source:"openai", category:"Strategic planning and team health", prompts:[
-    { id:"24.1", text:"Draft clear and measurable quarterly goals for my team. Here is the business context, company objectives, and recent performance: [insert context]. Return 3 Objectives with 3-4 Key Results each." },
-    { id:"24.2", text:"Assess skill gaps on my team. Here's our current skill matrix and desired future state: [insert info]. Identify key gaps and suggest training or hiring solutions. Return findings in a short table." },
-    { id:"24.3", text:"Based on this timesheet data (weekly hours logged per person), flag any early signs of burnout risk. Use a threshold of more than 45 hours for 2+ weeks. Return a summary of flagged employees and trends in average hours." },
-    { id:"24.4", text:"I'm noticing signs of disengagement or dysfunction on my team. Based on this description of recent behavior and team dynamics: [insert description], what are the likely causes and what should I do next? Provide a 3-part action plan." }
-  ]}
 ];
 
 let activeCategory = "All";
