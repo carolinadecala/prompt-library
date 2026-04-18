@@ -594,22 +594,22 @@ const data = [
     { id:"13.1", text:"Write a professional email to [recipient]. The email is about [topic] and should be polite, clear, and concise. Provide a subject line and a short closing." },
     { id:"13.2", text:"Rewrite the following text so it is easier to understand. The text will be used in a professional setting. Ensure the tone is clear, respectful, and concise. Text: [paste text]." },
     { id:"13.3", text:"Reframe this message for [audience type: executives, peers, or customers]. The message was originally written for [context]. Adjust tone, word choice, and style to fit the intended audience. Text: [paste text]." },
-    { id:"13.4", text:"Summarize this email thread into a short recap. Highlight key decisions, action items, and open questions. Email: [paste text]." }
+    { id:"13.4", text:"Summarise this email thread into a short recap. Highlight key decisions, action items, and open questions. Email: [paste text]." }
   ]},
   { id:14, source:"openai", category:"Meetings and collaboration", prompts:[
     { id:"14.1", text:"Create a structured agenda for a meeting about [topic]. The meeting will last [time] and include [attendees]. Break the agenda into sections with time estimates and goals for each section." },
-    { id:"14.2", text:"Summarize these meeting notes into a structured recap organized into three categories: key decisions, next steps, and responsibilities. Notes: [paste text]." },
+    { id:"14.2", text:"Summarise these meeting notes into a structured recap organised into three categories: key decisions, next steps, and responsibilities. Notes: [paste text]." },
     { id:"14.3", text:"Turn the following meeting notes into a clean task list. Group tasks by owner and include deadlines if mentioned. Notes: [paste text]." },
     { id:"14.4", text:"Write a professional follow-up email after a meeting about [topic]. Include a recap of key points, assigned responsibilities, and next steps with deadlines." }
   ]},
   { id:15, source:"openai", category:"Decision-making and risk analysis", prompts:[
-    { id:"15.1", text:"Analyze the following workplace issue: [describe issue]. Identify possible root causes and suggest questions to confirm them." },
+    { id:"15.1", text:"Analyse the following workplace issue: [describe issue]. Identify possible root causes and suggest questions to confirm them." },
     { id:"15.2", text:"Compare the following two or more possible solutions: [list options]. Evaluate pros, cons, and potential risks for each option. The decision needs to be made in [timeframe]." },
     { id:"15.3", text:"Help define clear decision-making criteria for [describe decision]. Multiple stakeholders are involved. Provide a short list of weighted criteria to guide the choice." },
     { id:"15.4", text:"Assess the potential risks of the following plan: [describe plan]. List risks by likelihood and impact, and suggest mitigation strategies." }
   ]},
   { id:16, source:"openai", category:"Productivity and task management", prompts:[
-    { id:"16.1", text:"Create a prioritized to-do list from the following tasks: [paste tasks]. Suggest which tasks should be done first and why." },
+    { id:"16.1", text:"Create a prioritised to-do list from the following tasks: [paste tasks]. Suggest which tasks should be done first and why." },
     { id:"16.2", text:"Build a weekly work plan for [describe role or situation]. The week includes deadlines, meetings, and individual focus time. Provide a balanced schedule with recommended priorities." },
     { id:"16.3", text:"Draft a short project update for stakeholders. The project is [describe project]. Include progress made, current blockers, and next steps. Write in a professional, concise style." },
     { id:"16.4", text:"Brainstorm potential solutions to the following workplace challenge: [describe challenge]. Provide at least 5 varied ideas, noting pros and cons for each." }
@@ -622,8 +622,8 @@ const data = [
     { id:"17.5", text:"Using this release summary, draft user-facing changelog notes for our next version release. Use a friendly, clear tone and group by category (new, improved, fixed). [Insert release notes or ticket list]." }
   ]},
   { id:18, source:"openai", category:"User research and feedback analysis", prompts:[
-    { id:"18.1", text:"Analyze this set of user feedback and identify the 4 most frequent themes. Summarize each with example quotes and suggested product implications. [Insert feedback or data dump]." },
-    { id:"18.2", text:"Based on the following product usage data, summarize 3 key behavioral trends and what they suggest about user needs. Recommend 2 follow-up investigations. [Insert data or summary]." },
+    { id:"18.1", text:"Analyse this set of user feedback and identify the 4 most frequent themes. Summarise each with example quotes and suggested product implications. [Insert feedback or data dump]." },
+    { id:"18.2", text:"Based on the following product usage data, summarise 3 key behavioral trends and what they suggest about user needs. Recommend 2 follow-up investigations. [Insert data or summary]." },
     { id:"18.3", text:"Review our product rollout plan and highlight 5 risks to successful adoption. Include likelihood, impact, and mitigation recommendations. [Insert rollout plan or summary]." },
     { id:"18.4", text:"Review the results of our recent A/B test (test vs. control). Identify statistical significance, key metrics that changed, and recommend next steps. [Upload test data]." }
   ]},
@@ -634,23 +634,23 @@ const data = [
     { id:"19.4", text:"Based on this engineering spec for [insert task or feature], write a JIRA ticket that includes the problem statement, context, goals, acceptance criteria, and technical notes for implementation." },
     { id:"19.5", text:"Write an onboarding guide for new engineers joining [insert team]. Include required tools, access setup, codebase overview, and first tasks. Make it suitable for self-service onboarding." }
   ]},
-  { id:20, source:"openai", category:"Debugging and system optimization", prompts:[
+  { id:20, source:"openai", category:"Debugging and system optimisation", prompts:[
     { id:"20.1", text:"A system in production is intermittently failing. Based on the following logs, metrics, and recent changes: [insert context], help identify the most likely causes and suggest next steps for mitigation." },
-    { id:"20.2", text:"Our service is experiencing latency and degraded performance during peak usage. Here are metrics, logs, and relevant traces: [insert context]. Help identify the bottlenecks and recommend specific optimizations." },
+    { id:"20.2", text:"Our service is experiencing latency and degraded performance during peak usage. Here are metrics, logs, and relevant traces: [insert context]. Help identify the bottlenecks and recommend specific optimisations." },
     { id:"20.3", text:"We're preparing test cases for [insert feature/system]. Brainstorm potential edge cases and failure scenarios not covered by standard testing, including unusual user inputs, system state changes, and concurrency issues." },
     { id:"20.4", text:"We currently use [insert tools] for monitoring [insert service]. Review our observability setup and suggest improvements across metrics, logging, alerting, and dashboards to improve issue detection and debugging." }
   ]},
   { id:21, source:"openai", category:"IT security and compliance", prompts:[
-    { id:"21.1", text:"Based on SOC 2 guidelines, create a checklist of IT-specific controls to review for an upcoming internal audit. Organize by domain (access, change management, incident response)." },
+    { id:"21.1", text:"Based on SOC 2 guidelines, create a checklist of IT-specific controls to review for an upcoming internal audit. Organise by domain (access, change management, incident response)." },
     { id:"21.2", text:"Review this access matrix of users, roles, and systems. Check whether each user's access level follows our least-privilege policy. Identify any potential overprovisioning and list users with permissions that may need to be scaled back." },
     { id:"21.3", text:"Review this API schema and a sample set of traffic logs. Identify common API security issues such as poor input validation or lack of authentication. Provide a list of findings with suggested fixes." },
-    { id:"21.4", text:"Analyze this user access log export. Identify users or IP addresses with unusual access frequency, after-hours logins, or failed attempts. Flag suspicious patterns and summarize results in a security review format." }
+    { id:"21.4", text:"Analyse this user access log export. Identify users or IP addresses with unusual access frequency, after-hours logins, or failed attempts. Flag suspicious patterns and summarise results in a security review format." }
   ]},
   { id:22, source:"openai", category:"IT operations and incident management", prompts:[
-    { id:"22.1", text:"Summarize the recent [insert system or service] outage. Include the root cause, timeline of events, user impact, and actions taken. Format the summary as a shareable internal postmortem report." },
-    { id:"22.2", text:"Create a draft disaster recovery playbook for a critical production service. Use this system diagram and our recovery objectives (RTO, RPO). Organize into steps to take before, during, and after a service outage." },
+    { id:"22.1", text:"Summarise the recent [insert system or service] outage. Include the root cause, timeline of events, user impact, and actions taken. Format the summary as a shareable internal postmortem report." },
+    { id:"22.2", text:"Create a draft disaster recovery playbook for a critical production service. Use this system diagram and our recovery objectives (RTO, RPO). Organise into steps to take before, during, and after a service outage." },
     { id:"22.3", text:"Write a professional internal communication announcing planned downtime for [insert system or tool]. Include timing, affected users, impact on work, and who to contact for questions." },
-    { id:"22.4", text:"Translate these system error logs into language that can be understood by a non-technical executive. Summarize what each log entry means in a few clear sentences. Present the explanation as an email draft." }
+    { id:"22.4", text:"Translate these system error logs into language that can be understood by a non-technical executive. Summarise what each log entry means in a few clear sentences. Present the explanation as an email draft." }
   ]},
   { id:23, source:"openai", category:"People management and coaching", prompts:[
     { id:"23.1", text:"Draft a 1:1 meeting template for my direct reports. Include check-ins on progress, roadblocks, career growth, and feedback. Format it as a bulleted agenda with guiding questions." },
@@ -659,7 +659,7 @@ const data = [
     { id:"23.4", text:"I'm dealing with a conflict between my team and another function. Here's a summary of the tension and recent incidents: [insert info]. Suggest root causes and a 3-step mediation approach." }
   ]},
   { id:0, source:"meta", category:"How to write a prompt", prompts:[
-    { id:"0.1", text:"You are a [role]. [Context about the situation]. Your task is to [specific task]. Format your response as [desired format].", note:"<strong>Role:</strong> the expert perspective to approach from. <strong>Objectives:</strong> what you want and how answers should be submitted. <strong>Context:</strong> specific details about the situation and who it's helping. <strong>Task:</strong> the action to take, in one sentence. <strong>Style and tone:</strong> how the final text should sound. <strong>Format:</strong> the exact structure of the deliverable. <strong>Example:</strong> a real-world reference for voice and structure." },
+    { id:"0.1", text:"You are a [role]. [Context about the situation]. Your task is to [specific task]. Format your response as [desired format].", note:"<strong>Role:</strong> the expert perspective to approach from. <br><strong>Objectives:</strong> what you want and how answers should be submitted.</br> <br><strong>Context:</strong> specific details about the situation and who it's helping.</br> <br><strong>Task:</strong> the action to take, in one sentence.</br> <br><strong>Style and tone:</strong> how the final text should sound.</br> <br><strong>Format:</strong> the exact structure of the deliverable.</br> <br><strong>Example:</strong> a real-world reference for voice and structure." },
     { id:"0.2", text:"[Your base prompt]. Keep your response under [length]. Avoid [what to exclude]. Focus only on [scope]." },
     { id:"0.3", text:"Here are two examples of the output I want: [Example 1] / [Example 2]. Now do the same for: [your actual input]." },
     { id:"0.4", text:"Give me [number] different approaches to [task]. For each, include a one-line rationale and the trade-offs." },
