@@ -658,6 +658,7 @@ const data = [
     { id:"23.3", text:"I have a difficult conversation coming up with a team member about [insert issue]. Help me think through what to say, how to open, and what questions to ask. Return a 3-part conversation guide." },
     { id:"23.4", text:"I'm dealing with a conflict between my team and another function. Here's a summary of the tension and recent incidents: [insert info]. Suggest root causes and a 3-step mediation approach." }
   ]},
+  // PROMPT WRITING
   { id:0, source:"meta", category:"How to write a prompt", prompts:[
     { id:"0.1", text:"You are a [role]. [Context about the situation]. Your task is to [specific task]. Format your response as [desired format].", note:"<strong>Role:</strong> the expert perspective to approach from. <br><strong>Objectives:</strong> what you want and how answers should be submitted.</br> <br><strong>Context:</strong> specific details about the situation and who it's helping.</br> <br><strong>Task:</strong> the action to take, in one sentence.</br> <br><strong>Style and tone:</strong> how the final text should sound.</br> <br><strong>Format:</strong> the exact structure of the deliverable.</br> <br><strong>Example:</strong> a real-world reference for voice and structure." },
     { id:"0.2", text:"[Your base prompt]. Keep your response under [length]. Avoid [what to exclude]. Focus only on [scope]." },
@@ -667,7 +668,6 @@ const data = [
     { id:"0.6", text:"Step 1: [First task]. Once done, use that output to complete Step 2: [Second task]. Present only the final result." },
     { id:"0.7", text:"Identify an analytical task you want to delegate. Find past data where you already completed that analysis. Work with AI to reproduce it. Evaluate the results systematically. Identify gaps, refine your prompt, and test again." },
     { id:"0.8", text:"Analyse the attached file and generate an executive summary in plain English." }
-  ]},
     { id:"0.9", text:"Use Markdown for complex, multi-step, or structured tasks. When using tags: close every opening tag before starting a parallel section, and limit each tag to the content it directly contains." },
     { id:"10", text:"Base your answer only on the attached documents. If the information is not available in the documents, say so explicitly. Do not make assumptions or draw on outside knowledge." }
   ]},
