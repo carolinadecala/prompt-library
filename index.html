@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F4ED;
+    --surface: #FFFFFF;
+    --ink: #111111;
+    --border: 2px solid #111111;
+    --accent: #ae78fd;
+    --accent2: #111111;
+    --muted: #666666;
+    --shadow: 4px 4px 0px #111111;
+    --shadow-lg: 6px 6px 0px #111111;
+    --shadow-hover: 6px 6px 0px #111111;
+    --color-anthropic: #c4603a;
+    --color-openai: #111111;
+    --mono: 'DM Mono', monospace;
+    --display: 'Syne', sans-serif;
+    --body: 'DM Sans', sans-serif;
+    --radius: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    min-height: 100vh;
+  }
+
+  /* Thick top bar */
+  .topbar {
+    background: var(--ink);
+    height: 6px;
+    width: 100%;
+  }
+
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 32px 100px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    margin-bottom: 56px;
+    border-bottom: var(--border);
+    padding-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+
+  h1 .accent-word {
+    display: inline-block;
+    background: var(--accent);
+    padding: 0 8px 4px;
+    border: var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 400;
+    max-width: 540px;
+    line-height: 1.65;
+    margin-bottom: 32px;
+  }
+
+  /* Stats row */
+  .stats {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border: var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    width: fit-content;
+    overflow: hidden;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 14px 24px;
+    border-right: var(--border);
+  }
+
+  .stat:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    font-family: var(--mono);
+  }
+
+  /* Source badges (inline in stats) */
+  .source-badges {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+  }
+
+  .source-dot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .source-dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border: var(--border);
+    flex-shrink: 0;
+  }
+
+  .source-dot.anthropic::before { background: var(--color-anthropic); border-color: var(--color-anthropic); }
+  .source-dot.openai::before { background: var(--color-openai); border-color: var(--color-openai); }
+
+  /* ── CONTROLS ── */
+  .controls {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 240px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    font-size: 16px;
+    font-family: var(--mono);
+  }
+
+  input[type="text"] {
+    width: 100%;
+    background: var(--surface);
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: 13px 14px 13px 40px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    transition: box-shadow 0.1s ease;
+    box-shadow: var(--shadow);
+  }
+
+  input[type="text"]::placeholder { color: #aaa; }
+
+  input[type="text"]:focus {
+    box-shadow: var(--shadow-lg);
+    outline: none;
+  }
+
+  /* ── SOURCE TABS ── */
+  .source-tabs {
+    display: flex;
+    gap: 0;
+    margin: 24px 0 0;
+    border: var(--border);
+    box-shadow: var(--shadow);
+    width: fit-content;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .src-tab {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    padding: 10px 18px;
+    border-right: var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.1s;
+    user-select: none;
+  }
+
+  .src-tab:last-child { border-right: none; }
+  .src-tab:hover { background: #eee; }
+  .src-tab.active { background: var(--ink); color: var(--accent); }
+  .src-tab.active-anthropic { background: var(--color-anthropic); color: #fff; }
+  .src-tab.active-openai { background: var(--color-openai); color: var(--accent); }
+
+  /* ── FILTER PILLS ── */
+  .filter-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 20px 0 0;
+  }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    padding: 7px 14px;
+    border: var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: box-shadow 0.1s, background 0.1s;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .pill:hover {
+    background: var(--bg);
+    box-shadow: 3px 3px 0px var(--ink);
+  }
+
+  .pill.active {
+    background: var(--accent);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+  }
+
+  /* ── RESULTS META ── */
+  .results-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin: 24px 0 32px;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+  }
+
+  /* ── CATEGORIES ── */
+  .category { margin-bottom: 52px; }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: var(--border);
+  }
+
+  .cat-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    min-width: 26px;
+  }
+
+  .cat-name {
+    font-family: var(--display);
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .cat-source {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border: var(--border);
+    border-radius: calc(var(--radius) - 2px);
+  }
+
+  .cat-source.anthropic { background: var(--color-anthropic); color: #fff; border-color: var(--color-anthropic); }
+  .cat-source.openai { background: var(--color-openai); color: var(--accent); border-color: var(--color-openai); }
+
+  .cat-count {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── PROMPT CARDS ── */
+  .prompts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .prompt-card {
+    background: var(--surface);
+    border: var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    box-shadow: var(--shadow);
+    transition: box-shadow 0.1s ease, transform 0.1s ease;
+    cursor: default;
+  }
+
+  .prompt-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translate(-1px, -1px);
+  }
+
+  .prompt-id {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #bbb;
+    min-width: 26px;
+    padding-top: 3px;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+
+  .prompt-text {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .copy-btn {
+    background: var(--bg);
+    border: var(--border);
+    border-radius: calc(var(--radius) - 2px);
+    color: var(--muted);
+    padding: 6px 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-shadow: 2px 2px 0px var(--ink);
+  }
+
+  .copy-btn:hover {
+    background: var(--ink);
+    color: var(--accent);
+    box-shadow: none;
+    transform: translate(2px, 2px);
+  }
+
+  .copy-btn.copied {
+    background: var(--accent);
+    color: var(--ink);
+    box-shadow: none;
+    transform: translate(2px, 2px);
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty {
+    text-align: center;
+    padding: 80px 20px;
+    border: var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    background: var(--surface);
+  }
+
+  .empty-title {
+    font-family: var(--display);
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+
+  .empty-sub { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+
+  /* ── HIGHLIGHT ── */
+  mark {
+    background: var(--accent);
+    color: var(--ink);
+    padding: 0 2px;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--ink); }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 32px 16px 80px; }
+    h1 { font-size: 36px; }
+    .stats { flex-wrap: wrap; width: 100%; }
+    .stat { flex: 1; min-width: 80px; }
+    .source-badges { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar"></div>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Prompt engineering reference</div>
+    <h1>Prompt <span class="accent-word">library</span></h1>
+    <p class="subtitle">Ready-to-use prompts from Anthropic's prompting best practices and the OpenAI Academy work prompt packs. Filter by source, category, or keyword — then copy.</p>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num" id="totalPrompts">0</span>
+        <span class="stat-label">Prompts</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" id="totalCats">0</span>
+        <span class="stat-label">Categories</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" id="visibleCount">0</span>
+        <span class="stat-label">Visible</span>
+      </div>
+      <div class="source-badges">
+        <span class="source-dot anthropic">Anthropic docs</span>
+        <span class="source-dot openai">OpenAI Academy</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="Search prompts..." autocomplete="off">
+    </div>
+  </div>
+
+  <div class="source-tabs" id="sourceTabs">
+    <div class="src-tab active" onclick="setSource('all')">All sources</div>
+    <div class="src-tab" onclick="setSource('anthropic')">Anthropic docs</div>
+    <div class="src-tab" onclick="setSource('openai')">OpenAI Academy</div>
+  </div>
+
+  <div class="filter-pills" id="pills"></div>
+  <div class="results-meta" id="resultsMeta"></div>
+  <div id="content"></div>
+</div>
+
+<script>
+const data = [
+  // ANTHROPIC DOCS
+  { id:1, source:"anthropic", category:"Verbosity and response length", prompts:[
+    { id:"1.1", text:"Provide concise, focused responses. Skip non-essential context, and keep examples minimal." },
+    { id:"1.2", text:"After completing a task that involves tool use, provide a quick summary of the work you've done." },
+    { id:"1.3", text:"Include as many relevant features and interactions as possible. Go beyond the basics to create a fully-featured implementation." }
+  ]},
+  { id:2, source:"anthropic", category:"Tone and communication style", prompts:[
+    { id:"2.1", text:"Use a warm, collaborative tone. Acknowledge the user's framing before answering." },
+    { id:"2.2", text:"Your response should be composed of smoothly flowing prose paragraphs." },
+    { id:"2.3", text:"Format your response in plain text only. Do not use LaTeX, MathJax, or any markup notation. Write all math expressions using standard text characters (e.g., \"/\" for division, \"*\" for multiplication, and \"^\" for exponents)." }
+  ]},
+  { id:3, source:"anthropic", category:"Formatting and markdown control", prompts:[
+    { id:"3.1", text:"When writing reports, documents, technical explanations, or long-form content, write in clear, flowing prose using complete paragraphs. Reserve markdown primarily for inline code and code blocks. Avoid ordered and unordered lists unless items are truly discrete or the user explicitly requests a list." },
+    { id:"3.2", text:"Write the prose sections of your response in <smoothly_flowing_prose_paragraphs> tags." },
+    { id:"3.3", text:"Do not use bold or italics." }
+  ]},
+  { id:4, source:"anthropic", category:"Reasoning and thinking depth", prompts:[
+    { id:"4.1", text:"This task involves multi-step reasoning. Think carefully through the problem before responding." },
+    { id:"4.2", text:"Thinking adds latency and should only be used when it will meaningfully improve answer quality, typically for problems that require multi-step reasoning. When in doubt, respond directly." },
+    { id:"4.3", text:"When deciding how to approach a problem, choose an approach and commit to it. Avoid revisiting decisions unless you encounter new information that directly contradicts your reasoning." },
+    { id:"4.4", text:"After receiving tool results, carefully reflect on their quality and determine optimal next steps before proceeding." },
+    { id:"4.5", text:"Before you finish, verify your answer against [test criteria]." }
+  ]},
+  { id:5, source:"anthropic", category:"Action vs. caution", prompts:[
+    { id:"5.1", text:"By default, implement changes rather than only suggesting them. If the user's intent is unclear, infer the most useful likely action and proceed, using tools to discover any missing details instead of guessing." },
+    { id:"5.2", text:"Do not jump into implementation or change files unless clearly instructed to do so. When the user's intent is ambiguous, default to providing information, doing research, and providing recommendations. Only proceed with edits or implementations when the user explicitly requests them." },
+    { id:"5.3", text:"Consider the reversibility and potential impact of your actions. Take local, reversible actions freely, but for actions that are hard to reverse, affect shared systems, or could be destructive, ask the user before proceeding." }
+  ]},
+  { id:6, source:"anthropic", category:"Tool use and parallel execution", prompts:[
+    { id:"6.1", text:"If you intend to call multiple tools and there are no dependencies between the tool calls, make all of the independent tool calls in parallel. Never use placeholders or guess missing parameters in tool calls." },
+    { id:"6.2", text:"Execute operations sequentially with brief pauses between each step to ensure stability." },
+    { id:"6.3", text:"Use [tool name] when it would enhance your understanding of the problem." }
+  ]},
+  { id:7, source:"anthropic", category:"Code quality and agentic coding", prompts:[
+    { id:"7.1", text:"Avoid over-engineering. Only make changes that are directly requested or clearly necessary. Do not add features, refactor code, or make improvements beyond what was asked." },
+    { id:"7.2", text:"Write a high-quality, general-purpose solution. Do not hard-code values or create solutions that only work for specific test inputs. Implement the actual logic that solves the problem generally." },
+    { id:"7.3", text:"Report every issue you find, including ones you are uncertain about or consider low-severity. Do not filter for importance at this stage. Include your confidence level and an estimated severity for each finding." },
+    { id:"7.4", text:"If you create any temporary new files or helper scripts for iteration, clean up these files by removing them at the end of the task." }
+  ]},
+  { id:8, source:"anthropic", category:"Hallucination prevention", prompts:[
+    { id:"8.1", text:"Never speculate about code you have not opened. If the user references a specific file, you MUST read the file before answering. Never make any claims about code before investigating unless you are certain of the correct answer." }
+  ]},
+  { id:9, source:"anthropic", category:"Long context and document handling", prompts:[
+    { id:"9.1", text:"Place long documents and inputs near the top of your prompt, above your query, instructions, and examples." },
+    { id:"9.2", text:"For long document tasks, quote the relevant parts of the documents first before carrying out your task." },
+    { id:"9.3", text:"Wrap each document in <document> tags with <document_content> and <source> subtags for clarity." }
+  ]},
+  { id:10, source:"anthropic", category:"Agentic and long-horizon tasks", prompts:[
+    { id:"10.1", text:"Your context window will be automatically compacted as it approaches its limit, allowing you to continue working indefinitely. Do not stop tasks early due to token budget concerns. Always be as persistent and autonomous as possible and complete tasks fully." },
+    { id:"10.2", text:"This is a very long task. It's encouraged to spend your entire output context working on it. Continue working systematically until you have completed the task." },
+    { id:"10.3", text:"Search for this information in a structured way. As you gather data, develop several competing hypotheses. Track your confidence levels in your progress notes. Regularly self-critique your approach and plan." }
+  ]},
+  { id:11, source:"anthropic", category:"Subagent orchestration", prompts:[
+    { id:"11.1", text:"Use subagents when tasks can run in parallel, require isolated context, or involve independent workstreams. For simple tasks, single-file edits, or tasks where you need to maintain context across steps, work directly rather than delegating." },
+    { id:"11.2", text:"Do not spawn a subagent for work you can complete directly in a single response. Spawn multiple subagents in the same turn when fanning out across items or reading multiple files." }
+  ]},
+  { id:12, source:"anthropic", category:"Frontend and design", prompts:[
+    { id:"12.1", text:"Avoid generic AI-generated aesthetics like overused font families (Inter, Roboto, Arial), clichéd color schemes (especially purple gradients), and predictable layouts. Use unique fonts, cohesive colors, and animations for effects and micro-interactions." },
+    { id:"12.2", text:"Before building, propose 4 distinct visual directions tailored to this brief (each as: bg hex / accent hex / typeface with a one-line rationale). Ask the user to pick one, then implement only that direction." },
+    { id:"12.3", text:"Create a professional presentation on [topic]. Include thoughtful design elements, visual hierarchy, and engaging animations where appropriate." }
+  ]},
+  // OPENAI ACADEMY
+  { id:13, source:"openai", category:"Writing and communication", prompts:[
+    { id:"13.1", text:"Write a professional email to [recipient]. The email is about [topic] and should be polite, clear, and concise. Provide a subject line and a short closing." },
+    { id:"13.2", text:"Rewrite the following text so it is easier to understand. The text will be used in a professional setting. Ensure the tone is clear, respectful, and concise. Text: [paste text]." },
+    { id:"13.3", text:"Reframe this message for [audience type: executives, peers, or customers]. The message was originally written for [context]. Adjust tone, word choice, and style to fit the intended audience. Text: [paste text]." },
+    { id:"13.4", text:"Summarize this email thread into a short recap. Highlight key decisions, action items, and open questions. Email: [paste text]." }
+  ]},
+  { id:14, source:"openai", category:"Meetings and collaboration", prompts:[
+    { id:"14.1", text:"Create a structured agenda for a meeting about [topic]. The meeting will last [time] and include [attendees]. Break the agenda into sections with time estimates and goals for each section." },
+    { id:"14.2", text:"Summarize these meeting notes into a structured recap organized into three categories: key decisions, next steps, and responsibilities. Notes: [paste text]." },
+    { id:"14.3", text:"Turn the following meeting notes into a clean task list. Group tasks by owner and include deadlines if mentioned. Notes: [paste text]." },
+    { id:"14.4", text:"Write a professional follow-up email after a meeting about [topic]. Include a recap of key points, assigned responsibilities, and next steps with deadlines." }
+  ]},
+  { id:15, source:"openai", category:"Decision-making and risk analysis", prompts:[
+    { id:"15.1", text:"Analyze the following workplace issue: [describe issue]. Identify possible root causes and suggest questions to confirm them." },
+    { id:"15.2", text:"Compare the following two or more possible solutions: [list options]. Evaluate pros, cons, and potential risks for each option. The decision needs to be made in [timeframe]." },
+    { id:"15.3", text:"Help define clear decision-making criteria for [describe decision]. Multiple stakeholders are involved. Provide a short list of weighted criteria to guide the choice." },
+    { id:"15.4", text:"Assess the potential risks of the following plan: [describe plan]. List risks by likelihood and impact, and suggest mitigation strategies." }
+  ]},
+  { id:16, source:"openai", category:"Productivity and task management", prompts:[
+    { id:"16.1", text:"Create a prioritized to-do list from the following tasks: [paste tasks]. Suggest which tasks should be done first and why." },
+    { id:"16.2", text:"Build a weekly work plan for [describe role or situation]. The week includes deadlines, meetings, and individual focus time. Provide a balanced schedule with recommended priorities." },
+    { id:"16.3", text:"Draft a short project update for stakeholders. The project is [describe project]. Include progress made, current blockers, and next steps. Write in a professional, concise style." },
+    { id:"16.4", text:"Brainstorm potential solutions to the following workplace challenge: [describe challenge]. Provide at least 5 varied ideas, noting pros and cons for each." }
+  ]},
+  { id:17, source:"openai", category:"Product strategy and roadmapping", prompts:[
+    { id:"17.1", text:"Based on this feature idea and customer need, write a first-draft PRD. Include user story, problem statement, solution overview, acceptance criteria, and success metrics. [Insert context or problem]." },
+    { id:"17.2", text:"Review this list of upcoming product initiatives. Use the data provided (impact scores, effort estimates, and strategic alignment notes) to suggest priority order with justification for each recommendation. [Insert initiative list]." },
+    { id:"17.3", text:"Based on this long-term goal and user need, write a concise product vision statement. Keep it inspiring and grounded in real outcomes. [Insert product goal]." },
+    { id:"17.4", text:"Review this list of product UI changes and propose 2 A/B test setups. Include hypothesis, success metrics, and potential outcomes. [Insert UI changes or user goals]." },
+    { id:"17.5", text:"Using this release summary, draft user-facing changelog notes for our next version release. Use a friendly, clear tone and group by category (new, improved, fixed). [Insert release notes or ticket list]." }
+  ]},
+  { id:18, source:"openai", category:"User research and feedback analysis", prompts:[
+    { id:"18.1", text:"Analyze this set of user feedback and identify the 4 most frequent themes. Summarize each with example quotes and suggested product implications. [Insert feedback or data dump]." },
+    { id:"18.2", text:"Based on the following product usage data, summarize 3 key behavioral trends and what they suggest about user needs. Recommend 2 follow-up investigations. [Insert data or summary]." },
+    { id:"18.3", text:"Review our product rollout plan and highlight 5 risks to successful adoption. Include likelihood, impact, and mitigation recommendations. [Insert rollout plan or summary]." },
+    { id:"18.4", text:"Review the results of our recent A/B test (test vs. control). Identify statistical significance, key metrics that changed, and recommend next steps. [Upload test data]." }
+  ]},
+  { id:19, source:"openai", category:"Engineering documentation", prompts:[
+    { id:"19.1", text:"I've drafted a technical design document for [insert project or feature]. Review it for clarity, architectural soundness, and completeness. Highlight any missing considerations or questions reviewers may raise." },
+    { id:"19.2", text:"Document how this internal API works for other developers. Here's the relevant code, schema, and usage examples: [insert materials]. Create clear documentation including endpoints, input/output formats, and expected behavior." },
+    { id:"19.3", text:"Draft a runbook for on-call engineers supporting [insert system]. Include sections for system overview, common alerts, diagnostic steps, and escalation procedures." },
+    { id:"19.4", text:"Based on this engineering spec for [insert task or feature], write a JIRA ticket that includes the problem statement, context, goals, acceptance criteria, and technical notes for implementation." },
+    { id:"19.5", text:"Write an onboarding guide for new engineers joining [insert team]. Include required tools, access setup, codebase overview, and first tasks. Make it suitable for self-service onboarding." }
+  ]},
+  { id:20, source:"openai", category:"Debugging and system optimization", prompts:[
+    { id:"20.1", text:"A system in production is intermittently failing. Based on the following logs, metrics, and recent changes: [insert context], help identify the most likely causes and suggest next steps for mitigation." },
+    { id:"20.2", text:"Our service is experiencing latency and degraded performance during peak usage. Here are metrics, logs, and relevant traces: [insert context]. Help identify the bottlenecks and recommend specific optimizations." },
+    { id:"20.3", text:"We're preparing test cases for [insert feature/system]. Brainstorm potential edge cases and failure scenarios not covered by standard testing, including unusual user inputs, system state changes, and concurrency issues." },
+    { id:"20.4", text:"We currently use [insert tools] for monitoring [insert service]. Review our observability setup and suggest improvements across metrics, logging, alerting, and dashboards to improve issue detection and debugging." }
+  ]},
+  { id:21, source:"openai", category:"IT security and compliance", prompts:[
+    { id:"21.1", text:"Based on SOC 2 guidelines, create a checklist of IT-specific controls to review for an upcoming internal audit. Organize by domain (access, change management, incident response)." },
+    { id:"21.2", text:"Review this access matrix of users, roles, and systems. Check whether each user's access level follows our least-privilege policy. Identify any potential overprovisioning and list users with permissions that may need to be scaled back." },
+    { id:"21.3", text:"Review this API schema and a sample set of traffic logs. Identify common API security issues such as poor input validation or lack of authentication. Provide a list of findings with suggested fixes." },
+    { id:"21.4", text:"Analyze this user access log export. Identify users or IP addresses with unusual access frequency, after-hours logins, or failed attempts. Flag suspicious patterns and summarize results in a security review format." }
+  ]},
+  { id:22, source:"openai", category:"IT operations and incident management", prompts:[
+    { id:"22.1", text:"Summarize the recent [insert system or service] outage. Include the root cause, timeline of events, user impact, and actions taken. Format the summary as a shareable internal postmortem report." },
+    { id:"22.2", text:"Create a draft disaster recovery playbook for a critical production service. Use this system diagram and our recovery objectives (RTO, RPO). Organize into steps to take before, during, and after a service outage." },
+    { id:"22.3", text:"Write a professional internal communication announcing planned downtime for [insert system or tool]. Include timing, affected users, impact on work, and who to contact for questions." },
+    { id:"22.4", text:"Translate these system error logs into language that can be understood by a non-technical executive. Summarize what each log entry means in a few clear sentences. Present the explanation as an email draft." }
+  ]},
+  { id:23, source:"openai", category:"People management and coaching", prompts:[
+    { id:"23.1", text:"Draft a 1:1 meeting template for my direct reports. Include check-ins on progress, roadblocks, career growth, and feedback. Format it as a bulleted agenda with guiding questions." },
+    { id:"23.2", text:"I want to give constructive feedback to a report who is underperforming. The issue is [insert behavior]. Suggest 2-3 ways to phrase it constructively, with pros and cons of each approach." },
+    { id:"23.3", text:"I have a difficult conversation coming up with a team member about [insert issue]. Help me think through what to say, how to open, and what questions to ask. Return a 3-part conversation guide." },
+    { id:"23.4", text:"I'm dealing with a conflict between my team and another function. Here's a summary of the tension and recent incidents: [insert info]. Suggest root causes and a 3-step mediation approach." }
+  ]},
+  { id:24, source:"openai", category:"Strategic planning and team health", prompts:[
+    { id:"24.1", text:"Draft clear and measurable quarterly goals for my team. Here is the business context, company objectives, and recent performance: [insert context]. Return 3 Objectives with 3-4 Key Results each." },
+    { id:"24.2", text:"Assess skill gaps on my team. Here's our current skill matrix and desired future state: [insert info]. Identify key gaps and suggest training or hiring solutions. Return findings in a short table." },
+    { id:"24.3", text:"Based on this timesheet data (weekly hours logged per person), flag any early signs of burnout risk. Use a threshold of more than 45 hours for 2+ weeks. Return a summary of flagged employees and trends in average hours." },
+    { id:"24.4", text:"I'm noticing signs of disengagement or dysfunction on my team. Based on this description of recent behavior and team dynamics: [insert description], what are the likely causes and what should I do next? Provide a 3-part action plan." }
+  ]}
+];
+
+let activeCategory = "All";
+let activeSource = "all";
+let searchQuery = "";
+
+const totalPrompts = data.reduce((acc, cat) => acc + cat.prompts.length, 0);
+document.getElementById("totalPrompts").textContent = totalPrompts;
+document.getElementById("totalCats").textContent = data.length;
+
+function escapeHtml(t) {
+  return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function highlight(text, query) {
+  if (!query) return escapeHtml(text);
+  const escaped = escapeHtml(text);
+  return escaped.replace(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
+}
+
+function render() {
+  const q = searchQuery.toLowerCase();
+  let totalVisible = 0;
+  let html = "";
+
+  data.forEach(cat => {
+    if (activeCategory !== "All" && cat.category !== activeCategory) return;
+    if (activeSource !== "all" && cat.source !== activeSource) return;
+    const filtered = cat.prompts.filter(p => !q || p.text.toLowerCase().includes(q) || p.id.includes(q));
+    if (!filtered.length) return;
+    totalVisible += filtered.length;
+    const srcLabel = cat.source === "anthropic" ? "Anthropic" : "OpenAI";
+    html += `<div class="category">
+      <div class="category-header">
+        <span class="cat-num">${String(cat.id).padStart(2,"0")}</span>
+        <span class="cat-name">${escapeHtml(cat.category)}</span>
+        <span class="cat-source ${cat.source}">${srcLabel}</span>
+        <span class="cat-count">${filtered.length} prompt${filtered.length!==1?"s":""}</span>
+      </div>
+      <div class="prompts-grid">
+        ${filtered.map(p=>`<div class="prompt-card" data-text="${escapeHtml(p.text)}">
+          <span class="prompt-id">${p.id}</span>
+          <span class="prompt-text">${highlight(p.text, searchQuery)}</span>
+          <button class="copy-btn" onclick="copyPrompt(this)"><span>Copy</span></button>
+        </div>`).join("")}
+      </div>
+    </div>`;
+  });
+
+  document.getElementById("content").innerHTML = html || `<div class="empty"><div class="empty-title">Nothing found</div><p class="empty-sub">Try a different search or filter</p></div>`;
+  document.getElementById("visibleCount").textContent = totalVisible;
+  document.getElementById("resultsMeta").textContent = q
+    ? `Showing ${totalVisible} of ${totalPrompts} prompts matching "${searchQuery}"`
+    : `Showing all ${totalVisible} prompts`;
+}
+
+function copyPrompt(btn) {
+  navigator.clipboard.writeText(btn.closest(".prompt-card").dataset.text).then(() => {
+    btn.classList.add("copied");
+    btn.querySelector("span").textContent = "Copied!";
+    setTimeout(() => { btn.classList.remove("copied"); btn.querySelector("span").textContent = "Copy"; }, 1800);
+  });
+}
+
+function buildPills() {
+  const visible = activeSource === "all" ? data : data.filter(d => d.source === activeSource);
+  if (activeCategory !== "All" && !visible.find(d => d.category === activeCategory)) activeCategory = "All";
+  const categories = ["All", ...visible.map(d => d.category)];
+  document.getElementById("pills").innerHTML = categories.map(cat =>
+    `<div class="pill ${cat===activeCategory?"active":""}" onclick="setCategory('${cat.replace(/'/g,"\\'")}')">${cat}</div>`
+  ).join("");
+}
+
+function setCategory(cat) { activeCategory = cat; buildPills(); render(); }
+
+function setSource(src) {
+  activeSource = src;
+  const tabs = document.querySelectorAll(".src-tab");
+  const classes = ["active", "active-anthropic", "active-openai"];
+  tabs.forEach(t => t.classList.remove(...classes));
+  if (src === "all") tabs[0].classList.add("active");
+  if (src === "anthropic") tabs[1].classList.add("active-anthropic");
+  if (src === "openai") tabs[2].classList.add("active-openai");
+  buildPills(); render();
+}
+
+document.getElementById("searchInput").addEventListener("input", e => { searchQuery = e.target.value; render(); });
+
+buildPills(); render();
+</script>
+</body>
+</html>
