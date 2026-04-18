@@ -21,7 +21,6 @@
     --color-anthropic: #c4603a;
     --color-openai: #111111;
     --color-meta: #e9ff01;
-    --mono: 'DM Mono', monospace;
     --display: 'Syne', sans-serif;
     --body: 'DM Sans', sans-serif;
     --radius: 8px;
@@ -83,7 +82,7 @@
   }
 
   .subtitle {
-    font-size: 18px;
+    font-size: 15px;
     color: var(--muted);
     font-weight: 400;
     max-width: 540px;
@@ -115,14 +114,14 @@
 
   .stat-num {
     font-family: var(--display);
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 800;
     color: var(--ink);
     line-height: 1;
   }
 
   .stat-label {
-    font-size: 12px;
+    font-size: 10px;
     color: var(--muted);
     letter-spacing: 0.06em;
     font-family: var(--mono);
@@ -131,7 +130,7 @@
   /* Source badges (inline in stats) */
   .source-badges {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 12px;
     padding: 14px 24px;
   }
@@ -141,7 +140,7 @@
     align-items: center;
     gap: 6px;
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 10px;
     letter-spacing: 0.04em;
     color: var(--muted);
   }
@@ -157,7 +156,7 @@
   .source-dot.anthropic::before { background: var(--color-anthropic); border-color: var(--color-anthropic); }
   .source-dot.openai::before { background: var(--color-openai); border-color: var(--color-openai); }
   .source-dot.meta::before { background: var(--color-meta); border-color: var(--ink); }
-  
+
   /* ── CONTROLS ── */
   .controls {
     display: flex;
@@ -233,6 +232,7 @@
   .src-tab.active { background: var(--ink); color: var(--accent); }
   .src-tab.active-anthropic { background: var(--color-anthropic); color: #fff; }
   .src-tab.active-openai { background: var(--color-openai); color: var(--accent); }
+  .src-tab.active-meta { background: var(--color-meta); color: var(--ink); }
 
   /* ── FILTER PILLS ── */
   .filter-pills {
@@ -244,7 +244,7 @@
 
   .pill {
     font-family: var(--mono);
-    font-size: 12px;
+    font-size: 10px;
     letter-spacing: 0.04em;
     padding: 7px 14px;
     border: var(--border);
@@ -320,7 +320,7 @@
   .cat-source.anthropic { background: var(--color-anthropic); color: #fff; border-color: var(--color-anthropic); }
   .cat-source.openai { background: var(--color-openai); color: var(--accent); border-color: var(--color-openai); }
   .cat-source.meta { background: var(--color-meta); color: var(--ink); border-color: var(--color-meta); }
-  
+
   .cat-count {
     margin-left: auto;
     font-family: var(--mono);
@@ -415,12 +415,12 @@
     color: var(--muted);
     margin-top: -2px;
   }
- 
+
   .prompt-note strong {
     color: var(--ink);
     font-weight: 500;
   }
- 
+
   /* ── EMPTY STATE ── */
   .empty {
     text-align: center;
@@ -645,12 +645,6 @@ const data = [
     { id:"23.3", text:"I have a difficult conversation coming up with a team member about [insert issue]. Help me think through what to say, how to open, and what questions to ask. Return a 3-part conversation guide." },
     { id:"23.4", text:"I'm dealing with a conflict between my team and another function. Here's a summary of the tension and recent incidents: [insert info]. Suggest root causes and a 3-step mediation approach." }
   ]},
-  { id:24, source:"openai", category:"Strategic planning and team health", prompts:[
-    { id:"24.1", text:"Draft clear and measurable quarterly goals for my team. Here is the business context, company objectives, and recent performance: [insert context]. Return 3 Objectives with 3-4 Key Results each." },
-    { id:"24.2", text:"Assess skill gaps on my team. Here's our current skill matrix and desired future state: [insert info]. Identify key gaps and suggest training or hiring solutions. Return findings in a short table." },
-    { id:"24.3", text:"Based on this timesheet data (weekly hours logged per person), flag any early signs of burnout risk. Use a threshold of more than 45 hours for 2+ weeks. Return a summary of flagged employees and trends in average hours." },
-    { id:"24.4", text:"I'm noticing signs of disengagement or dysfunction on my team. Based on this description of recent behavior and team dynamics: [insert description], what are the likely causes and what should I do next? Provide a 3-part action plan." }
-  ]}
   { id:0, source:"meta", category:"How to write a prompt", prompts:[
     { id:"0.1", text:"You are a [role]. [Context about the situation]. Your task is to [specific task]. Format your response as [desired format].", note:"<strong>Role</strong> — the expert perspective to approach from. <strong>Objectives</strong> — what you want and how answers should be submitted. <strong>Context</strong> — specific details about the situation and who it's helping. <strong>Task</strong> — the action to take, in one sentence. <strong>Style and tone</strong> — how the final text should sound. <strong>Format</strong> — the exact structure of the deliverable. <strong>Example</strong> — a real-world reference for voice and structure." },
     { id:"0.2", text:"[Your base prompt]. Keep your response under [length]. Avoid [what to exclude]. Focus only on [scope]." },
@@ -660,6 +654,12 @@ const data = [
     { id:"0.6", text:"Step 1: [First task]. Once done, use that output to complete Step 2: [Second task]. Present only the final result." },
     { id:"0.7", text:"Identify an analytical task you want to delegate. Find past data where you already completed that analysis. Work with AI to reproduce it. Evaluate the results systematically. Identify gaps, refine your prompt, and test again." },
     { id:"0.8", text:"Analyse the attached file and generate an executive summary in plain English." }
+  ]},
+  { id:24, source:"openai", category:"Strategic planning and team health", prompts:[
+    { id:"24.1", text:"Draft clear and measurable quarterly goals for my team. Here is the business context, company objectives, and recent performance: [insert context]. Return 3 Objectives with 3-4 Key Results each." },
+    { id:"24.2", text:"Assess skill gaps on my team. Here's our current skill matrix and desired future state: [insert info]. Identify key gaps and suggest training or hiring solutions. Return findings in a short table." },
+    { id:"24.3", text:"Based on this timesheet data (weekly hours logged per person), flag any early signs of burnout risk. Use a threshold of more than 45 hours for 2+ weeks. Return a summary of flagged employees and trends in average hours." },
+    { id:"24.4", text:"I'm noticing signs of disengagement or dysfunction on my team. Based on this description of recent behavior and team dynamics: [insert description], what are the likely causes and what should I do next? Provide a 3-part action plan." }
   ]}
 ];
 
@@ -686,8 +686,8 @@ function render() {
   let totalVisible = 0;
   let html = "";
 
-const sorted = [...data].sort((a, b) => a.id - b.id);
-  
+  const sorted = [...data].sort((a, b) => a.id - b.id);
+
   sorted.forEach(cat => {
     if (activeCategory !== "All" && cat.category !== activeCategory) return;
     if (activeSource !== "all" && cat.source !== activeSource) return;
@@ -703,11 +703,11 @@ const sorted = [...data].sort((a, b) => a.id - b.id);
         <span class="cat-count">${filtered.length} prompt${filtered.length!==1?"s":""}</span>
       </div>
       <div class="prompts-grid">
-        ${filtered.map(p=>`<div class="prompt-card" data-text="${escapeHtml(p.text)}">
+        ${filtered.map(p => `<div class="prompt-card" data-text="${escapeHtml(p.text)}">
           <span class="prompt-id">${p.id}</span>
           <span class="prompt-text">${highlight(p.text, searchQuery)}</span>
           <button class="copy-btn" onclick="copyPrompt(this)"><span>Copy</span></button>
-        </div>`).join("")}
+        </div>${p.note ? `<div class="prompt-note">${p.note}</div>` : ""}`).join("")}
       </div>
     </div>`;
   });
