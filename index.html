@@ -132,7 +132,7 @@
 
   .stat-num {
     font-family: var(--display);
-    font-size: 18px;
+    font-size: 28px;
     font-weight: 800;
     color: var(--ink);
     line-height: 1;
@@ -148,7 +148,7 @@
   /* Source badges (inline in stats) */
   .source-badges {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 12px;
     padding: 14px 24px;
   }
@@ -488,7 +488,7 @@
   <header>
     <div class="eyebrow">Prompt engineering reference</div>
     <h1>Prompt <span class="accent-word">library</span></h1>
-    <p class="subtitle">Ready-to-use prompts from Anthropic's prompting best practices and the OpenAI Academy work prompt packs. <br><br>Filter by source, category, or keyword, then copy.</br></p>
+    <p class="subtitle">Ready-to-use prompts from Anthropic's prompting best practices and the OpenAI Academy work prompt packs. <br>Filter by source, category, or keyword, then copy.</br></p>
 
     <div class="stats">
       <div class="stat">
@@ -503,6 +503,7 @@
         <span class="stat-num" id="visibleCount">0</span>
         <span class="stat-label">Visible</span>
       </div>
+
     </div>
   </header>
 
@@ -527,7 +528,6 @@
 
 <script>
 const data = [
-  
   // ANTHROPIC DOCS
   { id:1, source:"anthropic", category:"Verbosity and response length", prompts:[
     { id:"1.1", text:"Provide concise, focused responses. Skip non-essential context, and keep examples minimal." },
@@ -623,20 +623,20 @@ const data = [
   ]},
   { id:18, source:"openai", category:"User research and feedback analysis", prompts:[
     { id:"18.1", text:"Analyse this set of user feedback and identify the 4 most frequent themes. Summarise each with example quotes and suggested product implications. [Insert feedback or data dump]." },
-    { id:"18.2", text:"Based on the following product usage data, summarise 3 key behavioral trends and what they suggest about user needs. Recommend 2 follow-up investigations. [Insert data or summary]." },
+    { id:"18.2", text:"Based on the following product usage data, summarise 3 key behavioural trends and what they suggest about user needs. Recommend 2 follow-up investigations. [Insert data or summary]." },
     { id:"18.3", text:"Review our product rollout plan and highlight 5 risks to successful adoption. Include likelihood, impact, and mitigation recommendations. [Insert rollout plan or summary]." },
     { id:"18.4", text:"Review the results of our recent A/B test (test vs. control). Identify statistical significance, key metrics that changed, and recommend next steps. [Upload test data]." }
   ]},
   { id:19, source:"openai", category:"Engineering documentation", prompts:[
     { id:"19.1", text:"I've drafted a technical design document for [insert project or feature]. Review it for clarity, architectural soundness, and completeness. Highlight any missing considerations or questions reviewers may raise." },
-    { id:"19.2", text:"Document how this internal API works for other developers. Here's the relevant code, schema, and usage examples: [insert materials]. Create clear documentation including endpoints, input/output formats, and expected behavior." },
+    { id:"19.2", text:"Document how this internal API works for other developers. Here's the relevant code, schema, and usage examples: [insert materials]. Create clear documentation including endpoints, input/output formats, and expected behaviour." },
     { id:"19.3", text:"Draft a runbook for on-call engineers supporting [insert system]. Include sections for system overview, common alerts, diagnostic steps, and escalation procedures." },
     { id:"19.4", text:"Based on this engineering spec for [insert task or feature], write a JIRA ticket that includes the problem statement, context, goals, acceptance criteria, and technical notes for implementation." },
     { id:"19.5", text:"Write an onboarding guide for new engineers joining [insert team]. Include required tools, access setup, codebase overview, and first tasks. Make it suitable for self-service onboarding." }
   ]},
-  { id:20, source:"openai", category:"Debugging and system optimisation", prompts:[
+  { id:20, source:"openai", category:"Debugging and system optimization", prompts:[
     { id:"20.1", text:"A system in production is intermittently failing. Based on the following logs, metrics, and recent changes: [insert context], help identify the most likely causes and suggest next steps for mitigation." },
-    { id:"20.2", text:"Our service is experiencing latency and degraded performance during peak usage. Here are metrics, logs, and relevant traces: [insert context]. Help identify the bottlenecks and recommend specific optimisations." },
+    { id:"20.2", text:"Our service is experiencing latency and degraded performance during peak usage. Here are metrics, logs, and relevant traces: [insert context]. Help identify the bottlenecks and recommend specific optimizations." },
     { id:"20.3", text:"We're preparing test cases for [insert feature/system]. Brainstorm potential edge cases and failure scenarios not covered by standard testing, including unusual user inputs, system state changes, and concurrency issues." },
     { id:"20.4", text:"We currently use [insert tools] for monitoring [insert service]. Review our observability setup and suggest improvements across metrics, logging, alerting, and dashboards to improve issue detection and debugging." }
   ]},
@@ -654,7 +654,7 @@ const data = [
   ]},
   { id:23, source:"openai", category:"People management and coaching", prompts:[
     { id:"23.1", text:"Draft a 1:1 meeting template for my direct reports. Include check-ins on progress, roadblocks, career growth, and feedback. Format it as a bulleted agenda with guiding questions." },
-    { id:"23.2", text:"I want to give constructive feedback to a report who is underperforming. The issue is [insert behavior]. Suggest 2-3 ways to phrase it constructively, with pros and cons of each approach." },
+    { id:"23.2", text:"I want to give constructive feedback to a report who is underperforming. The issue is [insert behaviour]. Suggest 2-3 ways to phrase it constructively, with pros and cons of each approach." },
     { id:"23.3", text:"I have a difficult conversation coming up with a team member about [insert issue]. Help me think through what to say, how to open, and what questions to ask. Return a 3-part conversation guide." },
     { id:"23.4", text:"I'm dealing with a conflict between my team and another function. Here's a summary of the tension and recent incidents: [insert info]. Suggest root causes and a 3-step mediation approach." }
   ]},
@@ -662,21 +662,21 @@ const data = [
     { id:"24.1", text:"Draft clear and measurable quarterly goals for my team. Here is the business context, company objectives, and recent performance: [insert context]. Return 3 Objectives with 3-4 Key Results each." },
     { id:"24.2", text:"Assess skill gaps on my team. Here's our current skill matrix and desired future state: [insert info]. Identify key gaps and suggest training or hiring solutions. Return findings in a short table." },
     { id:"24.3", text:"Based on this timesheet data (weekly hours logged per person), flag any early signs of burnout risk. Use a threshold of more than 45 hours for 2+ weeks. Return a summary of flagged employees and trends in average hours." },
-    { id:"24.4", text:"I'm noticing signs of disengagement or dysfunction on my team. Based on this description of recent behavior and team dynamics: [insert description], what are the likely causes and what should I do next? Provide a 3-part action plan." }
+    { id:"24.4", text:"I'm noticing signs of disengagement or dysfunction on my team. Based on this description of recent behaviour and team dynamics: [insert description], what are the likely causes and what should I do next? Provide a 3-part action plan." }
   ]},
   // PROMPT WRITING
   { id:0, source:"meta", category:"How to write a prompt", prompts:[
-    { id:"0.1", text:"You are a [role]. [Context about the situation]. Your task is to [specific task]. Format your response as [desired format].", note:"<strong>Role:</strong> the expert perspective to approach from. <br><strong>Objectives:</strong> what you want and how answers should be submitted.</br> <br><strong>Context:</strong> specific details about the situation and who it's helping.</br> <br><strong>Task:</strong> the action to take, in one sentence.</br> <br><strong>Style and tone:</strong> how the final text should sound.</br> <br><strong>Format:</strong> the exact structure of the deliverable.</br> <br><strong>Example:</strong> a real-world reference for voice and structure." },
+    { id:"0.1", text:"You are a [role]. [Context about the situation]. Your task is to [specific task]. Format your response as [desired format].", note:"<strong>Role</strong> — the expert perspective to approach from. <strong>Objectives</strong> — what you want and how answers should be submitted. <strong>Context</strong> — specific details about the situation and who it's helping. <strong>Task</strong> — the action to take, in one sentence. <strong>Style and tone</strong> — how the final text should sound. <strong>Format</strong> — the exact structure of the deliverable. <strong>Example</strong> — a real-world reference for voice and structure." },
     { id:"0.2", text:"[Your base prompt]. Keep your response under [length]. Avoid [what to exclude]. Focus only on [scope]." },
     { id:"0.3", text:"Here are two examples of the output I want: [Example 1] / [Example 2]. Now do the same for: [your actual input]." },
     { id:"0.4", text:"Give me [number] different approaches to [task]. For each, include a one-line rationale and the trade-offs." },
     { id:"0.5", text:"Here is my first attempt: [paste draft]. Improve it by [specific improvement goal]. Keep [what to preserve]. Change [what to change]." },
     { id:"0.6", text:"Step 1: [First task]. Once done, use that output to complete Step 2: [Second task]. Present only the final result." },
     { id:"0.7", text:"Identify an analytical task you want to delegate. Find past data where you already completed that analysis. Work with AI to reproduce it. Evaluate the results systematically. Identify gaps, refine your prompt, and test again." },
-    { id:"0.8", text:"Analyse the attached file and generate an executive summary in plain English." }
+    { id:"0.8", text:"Analyse the attached file and generate an executive summary in plain English." },
     { id:"0.9", text:"Use Markdown for complex, multi-step, or structured tasks. When using tags: close every opening tag before starting a parallel section, and limit each tag to the content it directly contains." },
     { id:"10", text:"Base your answer only on the attached documents. If the information is not available in the documents, say so explicitly. Do not make assumptions or draw on outside knowledge." }
-  ]},
+    ]}
 ];
 
 let activeCategory = "All";
