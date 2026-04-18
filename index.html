@@ -20,6 +20,7 @@
     --shadow-hover: 6px 6px 0px #111111;
     --color-anthropic: #c4603a;
     --color-openai: #111111;
+    --color-meta: #e9ff01;
     --mono: 'DM Mono', monospace;
     --display: 'Syne', sans-serif;
     --body: 'DM Sans', sans-serif;
@@ -155,7 +156,8 @@
 
   .source-dot.anthropic::before { background: var(--color-anthropic); border-color: var(--color-anthropic); }
   .source-dot.openai::before { background: var(--color-openai); border-color: var(--color-openai); }
-
+  .source-dot.meta::before { background: var(--color-meta); border-color: var(--ink); }
+  
   /* ── CONTROLS ── */
   .controls {
     display: flex;
@@ -317,7 +319,8 @@
 
   .cat-source.anthropic { background: var(--color-anthropic); color: #fff; border-color: var(--color-anthropic); }
   .cat-source.openai { background: var(--color-openai); color: var(--accent); border-color: var(--color-openai); }
-
+  .cat-source.meta { background: var(--color-meta); color: var(--ink); border-color: var(--color-meta); }
+  
   .cat-count {
     margin-left: auto;
     font-family: var(--mono);
@@ -399,6 +402,25 @@
     transform: translate(2px, 2px);
   }
 
+  /* ── ANATOMY NOTE ── */
+  .prompt-note {
+    background: #faf8f4;
+    border: 1px solid #ddd;
+    border-left: 3px solid var(--color-meta);
+    border-radius: calc(var(--radius) - 2px);
+    padding: 12px 16px 12px 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-top: -2px;
+  }
+ 
+  .prompt-note strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+ 
   /* ── EMPTY STATE ── */
   .empty {
     text-align: center;
@@ -466,6 +488,7 @@
       <div class="source-badges">
         <span class="source-dot anthropic">Anthropic docs</span>
         <span class="source-dot openai">OpenAI Academy</span>
+        <span class="source-dot meta">Prompt writing</span>
       </div>
     </div>
   </header>
@@ -481,6 +504,7 @@
     <div class="src-tab active" onclick="setSource('all')">All sources</div>
     <div class="src-tab" onclick="setSource('anthropic')">Anthropic docs</div>
     <div class="src-tab" onclick="setSource('openai')">OpenAI Academy</div>
+    <div class="src-tab" onclick="setSource('meta')">Prompt writing</div>
   </div>
 
   <div class="filter-pills" id="pills"></div>
@@ -490,6 +514,7 @@
 
 <script>
 const data = [
+  // PROMPT WRITING
   // ANTHROPIC DOCS
   { id:1, source:"anthropic", category:"Verbosity and response length", prompts:[
     { id:"1.1", text:"Provide concise, focused responses. Skip non-essential context, and keep examples minimal." },
@@ -626,6 +651,16 @@ const data = [
     { id:"24.3", text:"Based on this timesheet data (weekly hours logged per person), flag any early signs of burnout risk. Use a threshold of more than 45 hours for 2+ weeks. Return a summary of flagged employees and trends in average hours." },
     { id:"24.4", text:"I'm noticing signs of disengagement or dysfunction on my team. Based on this description of recent behavior and team dynamics: [insert description], what are the likely causes and what should I do next? Provide a 3-part action plan." }
   ]}
+  { id:0, source:"meta", category:"How to write a prompt", prompts:[
+    { id:"0.1", text:"You are a [role]. [Context about the situation]. Your task is to [specific task]. Format your response as [desired format].", note:"<strong>Role</strong> — the expert perspective to approach from. <strong>Objectives</strong> — what you want and how answers should be submitted. <strong>Context</strong> — specific details about the situation and who it's helping. <strong>Task</strong> — the action to take, in one sentence. <strong>Style and tone</strong> — how the final text should sound. <strong>Format</strong> — the exact structure of the deliverable. <strong>Example</strong> — a real-world reference for voice and structure." },
+    { id:"0.2", text:"[Your base prompt]. Keep your response under [length]. Avoid [what to exclude]. Focus only on [scope]." },
+    { id:"0.3", text:"Here are two examples of the output I want: [Example 1] / [Example 2]. Now do the same for: [your actual input]." },
+    { id:"0.4", text:"Give me [number] different approaches to [task]. For each, include a one-line rationale and the trade-offs." },
+    { id:"0.5", text:"Here is my first attempt: [paste draft]. Improve it by [specific improvement goal]. Keep [what to preserve]. Change [what to change]." },
+    { id:"0.6", text:"Step 1: [First task]. Once done, use that output to complete Step 2: [Second task]. Present only the final result." },
+    { id:"0.7", text:"Identify an analytical task you want to delegate. Find past data where you already completed that analysis. Work with AI to reproduce it. Evaluate the results systematically. Identify gaps, refine your prompt, and test again." },
+    { id:"0.8", text:"Analyse the attached file and generate an executive summary in plain English." }
+  ]}
 ];
 
 let activeCategory = "All";
@@ -651,13 +686,15 @@ function render() {
   let totalVisible = 0;
   let html = "";
 
-  data.forEach(cat => {
+const sorted = [...data].sort((a, b) => a.id - b.id);
+  
+  sorted.forEach(cat => {
     if (activeCategory !== "All" && cat.category !== activeCategory) return;
     if (activeSource !== "all" && cat.source !== activeSource) return;
     const filtered = cat.prompts.filter(p => !q || p.text.toLowerCase().includes(q) || p.id.includes(q));
     if (!filtered.length) return;
     totalVisible += filtered.length;
-    const srcLabel = cat.source === "anthropic" ? "Anthropic" : "OpenAI";
+    const srcLabel = cat.source === "anthropic" ? "Anthropic" : cat.source === "openai" ? "OpenAI" : "Prompt writing";
     html += `<div class="category">
       <div class="category-header">
         <span class="cat-num">${String(cat.id).padStart(2,"0")}</span>
@@ -704,11 +741,12 @@ function setCategory(cat) { activeCategory = cat; buildPills(); render(); }
 function setSource(src) {
   activeSource = src;
   const tabs = document.querySelectorAll(".src-tab");
-  const classes = ["active", "active-anthropic", "active-openai"];
+  const classes = ["active", "active-anthropic", "active-openai", "active-meta"];
   tabs.forEach(t => t.classList.remove(...classes));
   if (src === "all") tabs[0].classList.add("active");
   if (src === "anthropic") tabs[1].classList.add("active-anthropic");
   if (src === "openai") tabs[2].classList.add("active-openai");
+  if (src === "meta") tabs[3].classList.add("active-meta");
   buildPills(); render();
 }
 
